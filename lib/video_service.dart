@@ -24,13 +24,14 @@ class VideoService {
       var manifest = await yt.videos.streamsClient.getManifest(video.id);
       var muxedStreams = manifest.muxed.sortByBitrate();
       
-      List> qualities = muxedStreams.map((stream) {
-        return {
-          'quality': stream.qualityLabel,
-          'size': '${(stream.size.totalMegaBytes).toStringAsFixed(1)} MB',
+      List> qualities = [];
+      for (var stream in muxedStreams) {
+        qualities.add({
+          'quality': stream.qualityLabel.toString(),
+          'size': '${stream.size.totalMegaBytes.toStringAsFixed(1)} MB',
           'url': stream.url.toString(),
-        };
-      }).toList();
+        });
+      }
 
       yt.close();
       return {
