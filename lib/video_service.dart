@@ -7,7 +7,7 @@ import 'package:file_picker/file_picker.dart';
 class VideoService {
   static final Dio _dio = Dio();
 
-  static Future> extractVideoInfo(String url) async {
+  static Future extractVideoInfo(String url) async {
     if (url.contains('youtube.com') || url.contains('youtu.be')) {
       return await _fetchYouTubeInfo(url);
     } else if (url.contains('tiktok.com') || url.contains('instagram.com') || url.contains('facebook.com')) {
@@ -17,14 +17,14 @@ class VideoService {
     }
   }
 
-  static Future> _fetchYouTubeInfo(String url) async {
+  static Future _fetchYouTubeInfo(String url) async {
     var yt = YoutubeExplode();
     try {
       var video = await yt.videos.get(url);
       var manifest = await yt.videos.streamsClient.getManifest(video.id);
       var muxedStreams = manifest.muxed.sortByBitrate();
       
-      List> videoQualities = [];
+      List videoQualities = [];
       for (var stream in muxedStreams) {
         videoQualities.add({
           'quality': stream.qualityLabel.toString(),
@@ -46,7 +46,7 @@ class VideoService {
     }
   }
 
-  static Future> _fetchSocialMediaInfoViaApi(String url) async {
+  static Future _fetchSocialMediaInfoViaApi(String url) async {
     await Future.delayed(const Duration(seconds: 2));
     return {
       'title': 'فيديو من وسائل التواصل الاجتماعي',
@@ -59,7 +59,7 @@ class VideoService {
     };
   }
 
-  static Future<String?> pickCustomDirectory() async {
+  static Future pickCustomDirectory() async {
     try {
       String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
       return selectedDirectory;
@@ -68,11 +68,11 @@ class VideoService {
     }
   }
 
-  static Future<void> downloadVideo(
+  static Future downloadVideo(
     String videoUrl, 
     String fileName, 
     String? customPath, 
-    Function(int, int) onProgress
+    Function onProgress
   ) async {
     try {
       Directory? directory;
