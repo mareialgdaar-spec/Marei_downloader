@@ -24,9 +24,9 @@ class VideoService {
       var manifest = await yt.videos.streamsClient.getManifest(video.id);
       var muxedStreams = manifest.muxed.sortByBitrate();
       
-      List> qualities = [];
+      List> videoQualities = [];
       for (var stream in muxedStreams) {
-        qualities.add({
+        videoQualities.add({
           'quality': stream.qualityLabel.toString(),
           'size': '${stream.size.totalMegaBytes.toStringAsFixed(1)} MB',
           'url': stream.url.toString(),
@@ -38,7 +38,7 @@ class VideoService {
         'title': video.title,
         'author': video.author,
         'thumbnail': video.thumbnails.highResUrl,
-        'qualities': qualities,
+        'qualities': videoQualities,
       };
     } catch (e) {
       yt.close();
