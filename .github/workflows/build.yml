@@ -22,8 +22,7 @@ jobs:
 
       - name: Update SDK to 36
         run: |
-          sed -i 's/compileSdk = [0-9]*/compileSdk = 36/g' android/app/build.gradle.kts || true
-          sed -i 's/compileSdk [0-9]*/compileSdk = 36/g' android/app/build.gradle.kts || true
+          sed -i 's/flutter.compileSdkVersion/36/g' android/app/build.gradle.kts || true
           sed -i 's/compileSdkVersion [0-9]*/compileSdkVersion 36/g' android/app/build.gradle || true
 
       - name: Install Dependencies
