@@ -20,7 +20,6 @@ jobs:
       - name: Generate Android Files
         run: flutter create . --platforms=android
 
-        run: |
           sed -i 's/flutter.compileSdkVersion/36/g' android/app/build.gradle.kts || true
           sed -i 's/compileSdkVersion [0-9]*/compileSdkVersion 36/g' android/app/build.gradle || true
 
