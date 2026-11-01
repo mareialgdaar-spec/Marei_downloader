@@ -76,7 +76,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
                     item.title,
                     style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                     maxLines: 2,
-                    overflow: Text.ellipsis,
+                    overflow: TextOverflow.ellipsis,
+
                   ),
                   subtitle: Padding(
                     padding: const EdgeInsets.only(top: 6.0),
