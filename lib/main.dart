@@ -102,7 +102,7 @@ class _DownloaderHomeScreenState extends State<DownloaderHomeScreen> {
                       _videoData!['title'],
                       style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                       maxLines: 2,
-                      overflow: Text.ellipsis,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ],
