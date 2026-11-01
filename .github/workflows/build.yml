@@ -20,8 +20,21 @@ jobs:
       - name: Generate Android Files
         run: flutter create . --platforms=android
 
-          sed -i 's/flutter.compileSdkVersion/36/g' android/app/build.gradle.kts || true
-          sed -i 's/compileSdkVersion [0-9]*/compileSdkVersion 36/g' android/app/build.gradle || true
+      - name: Force compileSdk to 36
+        run: |
+          python3 -c "
+          import glob
+          for path in glob.glob('android/app/build.gradle*'):
+              with open(path, 'r') as f:
+                  content = f.read()
+              content = content.replace('flutter.compileSdkVersion', '36')
+              content = content.replace('compileSdk = 34', 'compileSdk = 36')
+              content = content.replace('compileSdk 34', 'compileSdk = 36')
+              content = content.replace('compileSdkVersion 34', 'compileSdkVersion 36')
+              with open(path, 'w') as f:
+                  f.write(content)
+          print('Successfully updated SDK version to 36!')
+          "
 
       - name: Install Dependencies
         run: flutter pub get
