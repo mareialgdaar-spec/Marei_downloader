@@ -248,7 +248,7 @@ class _DownloaderHomeScreenState extends State<DownloaderHomeScreen> {
                         ? 'المسار: التنزيلات الافتراضية'
                         : 'المسار: ...${_customDownloadPath!.split('/').last}',
                     style: const TextStyle(color: Colors.grey, fontSize: 12),
-                    overflow: Text.ellipsis,
+                    overflow: TextOverflow.ellipsis
                   ),
                 ),
                 TextButton.icon(
