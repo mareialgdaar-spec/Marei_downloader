@@ -20,21 +20,24 @@ jobs:
       - name: Generate Android Files
         run: flutter create . --platforms=android
 
-      - name: Force compileSdk to 36 in KTS
+      - name: Force compileSdk to 36 (Bulletproof)
         run: |
           python3 -c "
-          import re
           path = 'android/app/build.gradle.kts'
-          try:
-              with open(path, 'r') as f:
-                  content = f.read()
-              # استبدال أي سطر يبدأ بـ compileSdk بالرقم 36 مباشرة
-              content = re.sub(r'compileSdk\s*=.*', 'compileSdk = 36', content)
-              with open(path, 'w') as f:
-                  f.write(content)
-              print('Successfully forced compileSdk to 36 in build.gradle.kts!')
-          except Exception as e:
-              print('Error updating file:', e)
+          with open(path, 'r') as f:
+              lines = f.readlines()
+          
+          new_lines = []
+          for line in lines:
+              if 'compileSdk' in line:
+                  print('Found old line:', line.strip())
+                  new_lines.append('    compileSdk = 36\n')
+              else:
+                  new_lines.append(line)
+                  
+          with open(path, 'w') as f:
+              f.writelines(new_lines)
+          print('Successfully forced compileSdk to 36!')
           "
 
       - name: Install Dependencies
