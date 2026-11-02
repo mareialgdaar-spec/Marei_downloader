@@ -20,20 +20,21 @@ jobs:
       - name: Generate Android Files
         run: flutter create . --platforms=android
 
-      - name: Force compileSdk to 36
+      - name: Force compileSdk to 36 in KTS
         run: |
           python3 -c "
-          import glob
-          for path in glob.glob('android/app/build.gradle*'):
+          import re
+          path = 'android/app/build.gradle.kts'
+          try:
               with open(path, 'r') as f:
                   content = f.read()
-              content = content.replace('flutter.compileSdkVersion', '36')
-              content = content.replace('compileSdk = 34', 'compileSdk = 36')
-              content = content.replace('compileSdk 34', 'compileSdk = 36')
-              content = content.replace('compileSdkVersion 34', 'compileSdkVersion 36')
+              # استبدال أي سطر يبدأ بـ compileSdk بالرقم 36 مباشرة
+              content = re.sub(r'compileSdk\s*=.*', 'compileSdk = 36', content)
               with open(path, 'w') as f:
                   f.write(content)
-          print('Successfully updated SDK version to 36!')
+              print('Successfully forced compileSdk to 36 in build.gradle.kts!')
+          except Exception as e:
+              print('Error updating file:', e)
           "
 
       - name: Install Dependencies
