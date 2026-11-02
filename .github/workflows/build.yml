@@ -20,24 +20,30 @@ jobs:
       - name: Generate Android Files
         run: flutter create . --platforms=android
 
-      - name: Force compileSdk to 36 (Bulletproof)
+      - name: Force SDK 36 Globally
         run: |
           python3 -c "
+          import re
+
+          # 1. تعديل ملف بناء الأندرويد الرئيسي
           path = 'android/app/build.gradle.kts'
           with open(path, 'r') as f:
-              lines = f.readlines()
+              content = f.read()
           
-          new_lines = []
-          for line in lines:
-              if 'compileSdk' in line:
-                  print('Found old line:', line.strip())
-                  new_lines.append('    compileSdk = 36\n')
-              else:
-                  new_lines.append(line)
-                  
+          # استبدال أي إشارة لـ compileSdk بالقيمة 36 مباشرة
+          content = content.replace('compileSdk = flutter.compileSdkVersion', 'compileSdk = 36')
+          content = content.replace('compileSdk flutter.compileSdkVersion', 'compileSdk = 36')
+          content = re.sub(r'compileSdk\s*=.*', 'compileSdk = 36', content)
+          
           with open(path, 'w') as f:
-              f.writelines(new_lines)
-          print('Successfully forced compileSdk to 36!')
+              f.write(content)
+
+          # 2. إضافة التوجيه لملف الخصائص لضمان الاستقرار
+          prop_path = 'android/gradle.properties'
+          with open(prop_path, 'a') as f:
+              f.write('\nflutter.compileSdkVersion=36\n')
+          
+          print('Successfully forced SDK 36 everywhere!')
           "
 
       - name: Install Dependencies
